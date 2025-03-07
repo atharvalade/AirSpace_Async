@@ -1,0 +1,37 @@
+{
+  "name": "nil_back_end",
+  "version": "1.0.0",
+  "description": "Backend for AirSpace NFT platform on =nil; network",
+  "main": "index.js",
+  "scripts": {
+    "setup": "node scripts/setup.js",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.ts --network nil_testnet",
+    "mint": "hardhat run scripts/mintNFTs.ts --network nil_testnet",
+    "generate-types": "hardhat typechain"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.0",
+    "@nomiclabs/hardhat-waffle": "^2.0.0",
+    "@typechain/ethers-v5": "^10.1.0",
+    "@typechain/hardhat": "^6.1.2",
+    "@types/node": "^20.11.24",
+    "@types/dotenv": "^8.2.0",
+    "chai": "^4.3.7",
+    "dotenv": "^16.4.5",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.20.1",
+    "ts-node": "^10.9.2",
+    "typechain": "^8.1.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.3",
+    "axios": "^1.6.7"
+  }
+}
