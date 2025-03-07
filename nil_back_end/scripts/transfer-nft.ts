@@ -20,6 +20,14 @@ function prompt(question: string): Promise<string> {
   });
 }
 
+// Function to get shard ID from .env
+function getShardId(): string | null {
+  if (process.env.NIL_SHARD_ID) {
+    return process.env.NIL_SHARD_ID;
+  }
+  return null;
+}
+
 async function main() {
   // Check if required environment variables are set
   if (!process.env.PRIVATE_KEY) {
@@ -33,6 +41,17 @@ async function main() {
   if (!process.env.NFT_CONTRACT_ADDRESS) {
     throw new Error("NFT_CONTRACT_ADDRESS not found in .env file");
   }
+
+  // Get shard ID from .env
+  const shardId = getShardId();
+  
+  if (!shardId) {
+    console.log("No shard ID found in .env file.");
+    console.log("Please run 'npm run get-shards' to select a shard before transferring NFTs.");
+    return;
+  }
+  
+  console.log(`Using shard ID: ${shardId}`);
 
   // Create provider and wallet
   const provider = new providers.JsonRpcProvider(process.env.NIL_TESTNET_URL);

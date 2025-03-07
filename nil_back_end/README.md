@@ -62,8 +62,9 @@ npm run setup
 This interactive script will:
 - Create or update your `.env` file
 - Prompt for your =nil; testnet URL
-- Prompt for your wallet's private key
+- Prompt for your wallet's private key (automatically extracted from =nil; CLI if available)
 - Prompt for the NFT contract address (if already deployed)
+- Prompt for your wallet address (automatically extracted from =nil; CLI if available)
 
 ## Wallet Setup
 
@@ -80,7 +81,37 @@ This script will guide you through the official =nil; CLI workflow:
 3. Generate a new private key (`nil keygen new`)
 4. Create a new smart account (`nil smart-account new`)
 5. Retrieve your smart account information (`nil smart-account info`)
-6. Save your wallet address to the `.env` file
+6. Extract your private key from the =nil; CLI config
+7. Save your wallet address and private key to the `.env` file
+
+### Extracting Your Private Key
+
+If you already have a =nil; CLI wallet set up but need to extract your private key:
+
+```bash
+npm run extract-key
+```
+
+This script will:
+1. Read the =nil; CLI config file
+2. Extract your private key
+3. Optionally save it to your `.env` file
+
+### Configuring Shards
+
+The =nil; network uses sharding, and you need to configure a shard ID to interact with. Use our shard configuration script:
+
+```bash
+npm run get-shards
+```
+
+This script will:
+1. Prompt you to enter a shard ID manually (e.g., 1, 2, 3, etc.)
+2. Save the shard ID to your `.env` file
+
+You must run this script before deploying contracts or minting NFTs.
+
+> **Note**: The =nil; network API does not currently support automatic shard ID retrieval. You will need to manually specify a shard ID to use.
 
 You can also manually set up your wallet using the =nil; CLI directly:
 
@@ -109,6 +140,12 @@ nil smart-account info
 npm run compile
 ```
 
+### Configure a Shard
+
+```bash
+npm run get-shards
+```
+
 ### Deploy Contract
 
 ```bash
@@ -118,7 +155,7 @@ npm run deploy
 This will:
 1. Check your wallet balance
 2. Request tokens from the faucet if needed
-3. Deploy the AirSpaceNFT contract
+3. Deploy the AirSpaceNFT contract to the configured shard
 4. Save the contract address to your `.env` file
 
 ### Mint NFTs
@@ -187,6 +224,9 @@ This project integrates with the =nil; network by:
 - **Error with deployer account**: Make sure your private key is correctly set in the .env file
 - **Wallet issues**: Ensure the =nil; CLI is properly installed and configured
 - **"Command not found" errors**: Run `npm run fix-path` to add the =nil; CLI to your PATH
+- **Private key errors**: Run `npm run extract-key` to extract your private key from the =nil; CLI config
+- **Shard errors**: Run `npm run get-shards` to configure a shard ID before deploying or minting
+- **Balance errors**: If you encounter "shard API not found" errors, try different shard IDs until you find one that works
 
 ## License
 

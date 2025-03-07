@@ -30,6 +30,14 @@ async function requestTokensFromFaucet(address: string, token: string = "NIL") {
   }
 }
 
+// Function to get shard ID from .env
+function getShardId(): string | null {
+  if (process.env.NIL_SHARD_ID) {
+    return process.env.NIL_SHARD_ID;
+  }
+  return null;
+}
+
 async function main() {
   // Check if PRIVATE_KEY is set in .env
   if (!process.env.PRIVATE_KEY) {
@@ -40,6 +48,17 @@ async function main() {
   if (!process.env.NIL_TESTNET_URL) {
     throw new Error("NIL_TESTNET_URL not found in .env file");
   }
+
+  // Get shard ID from .env
+  const shardId = getShardId();
+  
+  if (!shardId) {
+    console.log("No shard ID found in .env file.");
+    console.log("Please run 'npm run get-shards' to configure a shard before deploying.");
+    return;
+  }
+  
+  console.log(`Using shard ID: ${shardId}`);
 
   // Create provider and wallet
   const provider = new providers.JsonRpcProvider(process.env.NIL_TESTNET_URL);

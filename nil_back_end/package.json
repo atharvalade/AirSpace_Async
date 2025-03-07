@@ -7,6 +7,8 @@
     "setup": "node scripts/setup.js",
     "wallet-setup": "node scripts/wallet-setup.js",
     "fix-path": "bash scripts/fix-path.sh",
+    "extract-key": "node scripts/extract-key.js",
+    "get-shards": "node scripts/get-shards.js",
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy": "hardhat run scripts/deploy.ts --network nil_testnet",
