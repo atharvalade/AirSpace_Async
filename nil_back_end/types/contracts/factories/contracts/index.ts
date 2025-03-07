@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { AirSpaceNFT__factory } from "./AirSpaceNFT__factory";
+export { AirSpaceTransfer__factory } from "./AirSpaceTransfer__factory";

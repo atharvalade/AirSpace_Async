@@ -14,6 +14,8 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy": "hardhat run scripts/deploy.ts --network nil_testnet",
+    "deploy-transfer": "hardhat run scripts/deploy-transfer.ts --network nil_testnet",
+    "transfer-tokens": "hardhat run scripts/transfer-tokens.ts --network nil_testnet",
     "mint": "hardhat run scripts/mintNFTs.ts --network nil_testnet",
     "transfer": "hardhat run scripts/transfer-nft.ts --network nil_testnet",
     "generate-types": "hardhat typechain"

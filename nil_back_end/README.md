@@ -178,7 +178,7 @@ npm run compile
 npm run get-shards
 ```
 
-### Deploy Contract
+### Deploy NFT Contract
 
 ```bash
 npm run deploy
@@ -212,6 +212,42 @@ This interactive script will:
 3. Verify that you own the token
 4. Prompt for the recipient's wallet address
 5. Execute the transfer transaction
+
+## Automated Token and NFT Transfer
+
+This project includes a smart contract that automatically transfers 1 NIL token and an NFT to a hardcoded wallet address (0x000129e60021a183845df99aab9fb0931df64b5c).
+
+### Deploy Transfer Contract
+
+```bash
+npm run deploy-transfer
+```
+
+This will deploy the AirSpaceTransfer contract, which is designed to transfer both NIL tokens and NFTs to the hardcoded address.
+
+### Execute Transfer
+
+```bash
+npm run transfer-tokens
+```
+
+This interactive script will:
+1. Connect to your wallet, the NFT contract, and the transfer contract
+2. Prompt for the NFT token ID to transfer
+3. Verify that you own the token
+4. Send 1 NIL to the transfer contract
+5. Approve the transfer contract to handle your NFT
+6. Execute the transfer of both 1 NIL and the NFT to the hardcoded address
+
+### Transfer Contract Details
+
+The `AirSpaceTransfer` contract includes the following functions:
+
+- `transferNIL()`: Transfers 1 NIL token to the hardcoded recipient
+- `transferNFT(address nftContract, uint256 tokenId)`: Transfers a specific NFT to the hardcoded recipient
+- `transferBoth(address nftContract, uint256 tokenId)`: Transfers both 1 NIL and a specific NFT to the hardcoded recipient
+- `withdrawNIL(uint256 amount)`: Allows the owner to withdraw NIL tokens from the contract
+- `withdrawNFT(address nftContract, uint256 tokenId)`: Allows the owner to withdraw an NFT from the contract
 
 ## Contract Details
 
@@ -247,6 +283,7 @@ This project integrates with the =nil; network by:
 3. Deploying ERC-721 contracts to the network
 4. Minting NFTs on the network
 5. Facilitating NFT transfers between wallets
+6. Automating token and NFT transfers to a specific address
 
 ## Troubleshooting
 

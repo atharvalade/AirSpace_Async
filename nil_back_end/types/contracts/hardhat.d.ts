@@ -44,6 +44,10 @@ declare module "hardhat/types/runtime" {
       name: "AirSpaceNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AirSpaceNFT__factory>;
+    getContractFactory(
+      name: "AirSpaceTransfer",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AirSpaceTransfer__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -85,6 +89,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.AirSpaceNFT>;
+    getContractAt(
+      name: "AirSpaceTransfer",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AirSpaceTransfer>;
 
     // default types
     getContractFactory(

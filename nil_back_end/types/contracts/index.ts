@@ -22,3 +22,5 @@ export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
 export type { AirSpaceNFT } from "./contracts/AirSpaceNFT";
 export { AirSpaceNFT__factory } from "./factories/contracts/AirSpaceNFT__factory";
+export type { AirSpaceTransfer } from "./contracts/AirSpaceTransfer";
+export { AirSpaceTransfer__factory } from "./factories/contracts/AirSpaceTransfer__factory";

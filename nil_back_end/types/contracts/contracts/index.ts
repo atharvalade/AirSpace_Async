@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { AirSpaceNFT } from "./AirSpaceNFT";
+export type { AirSpaceTransfer } from "./AirSpaceTransfer";
