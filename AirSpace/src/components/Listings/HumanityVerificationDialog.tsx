@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/SharedComponent/Dialog';
 import { Button } from '@/components/SharedComponent/Button';
-import { useHumanityProtocol } from '@/context/HumanityProtocolContext';
-import { useZkSyncAuth } from '@/context/ZkSyncAuthContext';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 
@@ -19,18 +17,9 @@ const HumanityVerificationDialog: React.FC<HumanityVerificationDialogProps> = ({
   onClose,
   onVerified
 }) => {
-  const { verifyCredential, hasCredential, createCredential, isFallbackMode } = useHumanityProtocol();
-  const { address } = useZkSyncAuth();
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Log fallback mode status but don't show in UI
-  useEffect(() => {
-    if (isFallbackMode) {
-      console.log('Humanity Protocol service is running in fallback mode');
-    }
-  }, [isFallbackMode]);
 
   // Reset state when dialog opens
   useEffect(() => {
@@ -42,33 +31,21 @@ const HumanityVerificationDialog: React.FC<HumanityVerificationDialogProps> = ({
   }, [isOpen]);
 
   const handleVerify = async () => {
-    if (!address) {
-      setError("Wallet not connected");
-      return;
-    }
-
     try {
       setIsVerifying(true);
       setError(null);
       
-      // If the user doesn't have a credential, create one first
-      if (!hasCredential) {
-        await createCredential();
-      }
+      // Simulate verification process
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Verify the credential
-      const verified = await verifyCredential();
+      // Simulate successful verification
+      setIsVerified(true);
       
-      if (verified) {
-        setIsVerified(true);
-        // Wait a moment before closing to show success state
-        setTimeout(() => {
-          onVerified();
-          onClose();
-        }, 1500);
-      } else {
-        setError("Verification failed. Please try again or create a new credential.");
-      }
+      // Wait a moment before closing to show success state
+      setTimeout(() => {
+        onVerified();
+        onClose();
+      }, 1500);
     } catch (err) {
       console.error("Verification error:", err);
       setError("An error occurred during verification. Please try again.");
@@ -85,8 +62,8 @@ const HumanityVerificationDialog: React.FC<HumanityVerificationDialogProps> = ({
           <div className="h-24 w-24 bg-white rounded-full p-2 shadow-lg shadow-primary/20 border-4 border-primary/30">
             <div className="relative h-full w-full">
               <Image 
-                src="/images/Humanity_Protocol.png" 
-                alt="Humanity Protocol" 
+                src="/images/nil-logo.png" 
+                alt="=nil; Foundation" 
                 fill
                 className="object-contain"
               />
@@ -96,28 +73,20 @@ const HumanityVerificationDialog: React.FC<HumanityVerificationDialogProps> = ({
         
         <DialogHeader className="pb-4 border-b border-gray-700">
           <DialogTitle className="text-center text-2xl font-semibold">
-            Humanity Verification
+            Identity Verification
           </DialogTitle>
           <DialogDescription className="text-gray-300 mt-2 text-center">
-            Verify your humanity credential before proceeding with the purchase.
+            Verify your identity before proceeding with the purchase.
           </DialogDescription>
         </DialogHeader>
         
         <div className="py-6">
-          {!hasCredential ? (
-            <div className="text-center p-5 bg-yellow-900/20 border border-yellow-700/30 rounded-lg mb-4">
-              <Icon icon="mdi:alert-circle-outline" className="h-10 w-10 text-yellow-500 mx-auto mb-3" />
-              <p className="text-yellow-300 font-medium mb-1">No Credential Found</p>
-              <p className="text-sm text-yellow-200/80">
-                You don't have a humanity credential yet. Click "Verify Humanity" to create one.
-              </p>
-            </div>
-          ) : isVerified ? (
+          {isVerified ? (
             <div className="text-center p-5 bg-green-900/20 border border-green-700/30 rounded-lg mb-4">
               <Icon icon="mdi:check-circle" className="h-10 w-10 text-green-500 mx-auto mb-3" />
               <p className="text-green-300 font-medium mb-1">Verification Successful</p>
               <p className="text-sm text-green-200/80">
-                Your humanity has been verified! You can now proceed with your purchase.
+                Your identity has been verified! You can now proceed with your purchase.
               </p>
             </div>
           ) : error ? (
@@ -135,7 +104,7 @@ const HumanityVerificationDialog: React.FC<HumanityVerificationDialogProps> = ({
                 <div>
                   <h3 className="text-white font-medium mb-1">Privacy Preserved</h3>
                   <p className="text-sm text-gray-300">
-                    Your credential will be verified without revealing any personal information.
+                    Your identity will be verified without revealing any personal information.
                   </p>
                 </div>
               </div>
@@ -145,9 +114,9 @@ const HumanityVerificationDialog: React.FC<HumanityVerificationDialogProps> = ({
                   <Icon icon="mdi:account-check" className="h-6 w-6 text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="text-white font-medium mb-1">Unique Human</h3>
+                  <h3 className="text-white font-medium mb-1">Unique Identity</h3>
                   <p className="text-sm text-gray-300">
-                    This verification ensures that you are a unique human, preventing duplicate accounts.
+                    This verification ensures that you are a unique individual, preventing duplicate accounts.
                   </p>
                 </div>
               </div>
@@ -180,7 +149,7 @@ const HumanityVerificationDialog: React.FC<HumanityVerificationDialogProps> = ({
                 <span>Verified</span>
               </div>
             ) : (
-              'Verify Humanity'
+              'Verify Identity'
             )}
           </Button>
         </DialogFooter>

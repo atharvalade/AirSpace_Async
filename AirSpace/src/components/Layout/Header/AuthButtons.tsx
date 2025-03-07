@@ -3,8 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import FlowAuthButton from "@/components/Auth/FlowAuthButton";
-import ZkSyncAuthButton from "@/components/Auth/ZkSyncAuthButton";
+import NilAuthButton from "@/components/Auth/NilAuthButton";
 
 interface AuthButtonsProps {
   onSignInClick?: () => void;
@@ -14,8 +13,7 @@ interface AuthButtonsProps {
 const AuthButtons = ({ onSignInClick, onSignUpClick }: AuthButtonsProps) => {
   return (
     <div className="flex items-center gap-4">
-      <ZkSyncAuthButton />
-      <FlowAuthButton />
+      <NilAuthButton />
     </div>
   );
 };

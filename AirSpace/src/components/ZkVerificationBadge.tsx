@@ -13,14 +13,14 @@ interface ZkVerificationBadgeProps {
 const ZkVerificationBadge: React.FC<ZkVerificationBadgeProps> = ({
   verified,
   proofId,
-  system = 'groth16',
+  system = 'nil',
   className = '',
 }) => {
   return (
     <Tooltip
       content={
         <div className="p-2 max-w-xs">
-          <p className="font-semibold mb-1">ZK Verification Status</p>
+          <p className="font-semibold mb-1">Verification Status</p>
           <p className="text-sm mb-1">
             {verified ? 'Verified ✓' : 'Not Verified ✗'}
           </p>
@@ -37,13 +37,13 @@ const ZkVerificationBadge: React.FC<ZkVerificationBadgeProps> = ({
         {verified ? (
           <div className="flex items-center text-green-500">
             <ShieldCheckIcon className="h-5 w-5 mr-1" />
-            <span className="text-sm font-medium">ZK Verified</span>
+            <span className="text-sm font-medium">Verified</span>
             <CheckCircleIcon className="h-4 w-4 ml-1" />
           </div>
         ) : (
           <div className="flex items-center text-gray-400">
             <ShieldCheckIcon className="h-5 w-5 mr-1" />
-            <span className="text-sm font-medium">ZK Pending</span>
+            <span className="text-sm font-medium">Pending</span>
           </div>
         )}
       </div>

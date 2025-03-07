@@ -6,8 +6,6 @@ import { NFT } from "@/types/nft";
 import { AgreementDialog } from "./AgreementDialog";
 import dynamic from 'next/dynamic';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import HumanityVerificationDialog from "./HumanityVerificationDialog";
-import ZkVerificationBadge from "@/components/ZkVerificationBadge";
 
 // Dynamically import the map component with no SSR
 const PropertyMapView = dynamic(() => import('./PropertyMapView'), {
@@ -66,8 +64,6 @@ export const ListingsGrid = () => {
   const [agreementText, setAgreementText] = useState<string | null>(null);
   const [agreementLoading, setAgreementLoading] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState<NFT | null>(null);
-  const [isHumanityVerificationOpen, setIsHumanityVerificationOpen] = useState(false);
-  const [verifiedListings, setVerifiedListings] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -111,13 +107,6 @@ export const ListingsGrid = () => {
         });
         
         setListings(transformedListings);
-        
-        // Set all listings as verified (mock data)
-        const verifiedMap: Record<string, boolean> = {};
-        transformedListings.forEach(listing => {
-          verifiedMap[listing.id] = true;
-        });
-        setVerifiedListings(verifiedMap);
       } catch (err) {
         console.error('Error fetching listings:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch listings');
@@ -131,31 +120,29 @@ export const ListingsGrid = () => {
 
   const handleBuyClick = async (nft: NFT) => {
     setSelectedNFT(nft);
-    // Open humanity verification dialog first
-    setIsHumanityVerificationOpen(true);
+    // Show agreement dialog directly
+    showAgreementDialog(nft);
   };
 
-  const handleHumanityVerified = () => {
-    // After humanity verification is successful, show the agreement dialog
+  const showAgreementDialog = (nft: NFT) => {
     setAgreementLoading(true);
     setIsAgreementOpen(true);
 
     try {
       // Generate placeholder agreement instead of fetching from API
-      if (selectedNFT) {
-        const placeholderAgreement = `
-**Agreement Between ${SELLER_DETAILS.name} and ${BUYER_DETAILS.name}: NFT Purchase Agreement for ${selectedNFT.title}**
+      const placeholderAgreement = `
+**Agreement Between ${SELLER_DETAILS.name} and ${BUYER_DETAILS.name}: NFT Purchase Agreement for ${nft.title}**
 
 This Agreement is made effective as of ${new Date().toLocaleDateString()}.
 
 **1. Purchase Price and Payment Terms**
-Buyer agrees to pay $${selectedNFT.price.toLocaleString()} USDC for the NFT Token ID: ${selectedNFT.token_id}.
+Buyer agrees to pay $${nft.price.toLocaleString()} NIL for the NFT Token ID: ${nft.token_id}.
 
 **2. Property Details**
-- Property Address: ${selectedNFT.propertyAddress}
-- Current Height: ${selectedNFT.currentHeight} floors
-- Maximum Height: ${selectedNFT.maximumHeight} floors
-- Available Floors: ${selectedNFT.availableFloors} floors
+- Property Address: ${nft.propertyAddress}
+- Current Height: ${nft.currentHeight} floors
+- Maximum Height: ${nft.maximumHeight} floors
+- Available Floors: ${nft.availableFloors} floors
 
 **3. Parties**
 Seller:
@@ -174,11 +161,8 @@ Upon receipt of complete payment, all rights and ownership will be transferred t
 **5. Terms and Conditions**
 The buyer acknowledges that this NFT represents the right to build additional floors on the property, subject to local regulations and zoning laws.
 `;
-        
-        setAgreementText(placeholderAgreement);
-      } else {
-        setAgreementText('No property selected. Please try again.');
-      }
+      
+      setAgreementText(placeholderAgreement);
     } catch (err) {
       console.error('Error generating agreement:', err);
       setAgreementText('Failed to generate agreement. Please try again.');
@@ -219,13 +203,8 @@ The buyer acknowledges that this NFT represents the right to build additional fl
             </div>
             <div className="flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between mb-4">
+                <div className="mb-4">
                   <h2 className="text-white text-28">{listing.title}</h2>
-                  <ZkVerificationBadge 
-                    verified={verifiedListings[listing.id] || false} 
-                    proofId={`proof-${listing.id}`}
-                    system="groth16"
-                  />
                 </div>
                 <p className="text-muted text-opacity-80 text-16 mb-4">
                   {listing.propertyAddress}
@@ -248,29 +227,26 @@ The buyer acknowledges that this NFT represents the right to build additional fl
                   <p className="text-primary text-24">{listing.availableFloors} floors</p>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted text-16">Price</p>
-                  <p className="text-primary text-32">${listing.price.toLocaleString()} USDC</p>
+              <div className="flex flex-col space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-muted text-16">Price</p>
+                    <p className="text-white text-28">${listing.price.toLocaleString()}</p>
+                  </div>
+                  <button
+                    onClick={() => handleBuyClick(listing)}
+                    className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl transition-colors"
+                  >
+                    Buy Now
+                  </button>
                 </div>
-                <button 
-                  className="bg-primary text-darkmode px-8 py-3 rounded-lg text-18 font-medium hover:bg-opacity-90 transition-all"
-                  onClick={() => handleBuyClick(listing)}
-                >
-                  Buy Now
-                </button>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      <HumanityVerificationDialog
-        isOpen={isHumanityVerificationOpen}
-        onClose={() => setIsHumanityVerificationOpen(false)}
-        onVerified={handleHumanityVerified}
-      />
-
+      {/* Agreement Dialog */}
       <AgreementDialog
         isOpen={isAgreementOpen}
         onClose={() => setIsAgreementOpen(false)}
