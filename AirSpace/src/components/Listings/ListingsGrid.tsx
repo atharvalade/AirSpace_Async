@@ -136,7 +136,7 @@ export const ListingsGrid = () => {
 This Agreement is made effective as of ${new Date().toLocaleDateString()}.
 
 **1. Purchase Price and Payment Terms**
-Buyer agrees to pay $${nft.price.toLocaleString()} NIL for the NFT Token ID: ${nft.token_id}.
+Buyer agrees to pay ${nft.price.toLocaleString()} NIL for the NFT Token ID: ${nft.token_id}.
 
 **2. Property Details**
 - Property Address: ${nft.propertyAddress}
@@ -231,7 +231,7 @@ The buyer acknowledges that this NFT represents the right to build additional fl
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-muted text-16">Price</p>
-                    <p className="text-white text-28">${listing.price.toLocaleString()}</p>
+                    <p className="text-white text-28">{listing.price.toLocaleString()} NIL</p>
                   </div>
                   <button
                     onClick={() => handleBuyClick(listing)}

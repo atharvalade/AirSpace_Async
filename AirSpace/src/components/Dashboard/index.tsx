@@ -8,8 +8,6 @@ import MarketMetrics from "./MarketMetrics";
 import TransactionHistory from "./TransactionHistory";
 import NFTGallery from "./NFTGallery";
 import NetworkStatus from "./NetworkStatus";
-import ZkSyncAccountInfo from "./ZkSyncAccountInfo";
-import HumanityCredentialWidget from "./HumanityCredentialWidget";
 import dynamic from "next/dynamic";
 
 // Dynamically import the map component with no SSR
@@ -309,7 +307,6 @@ const Dashboard = () => {
               <NetworkStatus />
             </div>
             <div className="bg-dark_grey bg-opacity-35 rounded-3xl p-8">
-              <ZkSyncAccountInfo />
             </div>
           </div>
 

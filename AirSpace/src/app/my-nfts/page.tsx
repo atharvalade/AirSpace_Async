@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useFlow } from "@/context/FlowContext";
-import flowNftService from "@/services/flowNftService";
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
@@ -22,27 +20,68 @@ interface NFT {
   price: string;
 }
 
+// Mock data for NFTs
+const mockNFTs: NFT[] = [
+  {
+    id: "1",
+    name: "Niagara Tower Air Rights",
+    description: "Air rights for the iconic Niagara Tower in downtown.",
+    thumbnail: "/images/hero/banner-image.png",
+    propertyAddress: "123 Niagara Ave, Toronto, ON",
+    currentHeight: 120,
+    maximumHeight: 180,
+    availableFloors: 20,
+    price: "150 NIL"
+  },
+  {
+    id: "2",
+    name: "Vancouver Heights",
+    description: "Premium air rights in the heart of Vancouver.",
+    thumbnail: "/images/listings/vancouver.png",
+    propertyAddress: "456 Pacific St, Vancouver, BC",
+    currentHeight: 85,
+    maximumHeight: 150,
+    availableFloors: 22,
+    price: "180 NIL"
+  },
+  {
+    id: "3",
+    name: "Miami Skyline",
+    description: "Beachfront property air rights with ocean views.",
+    thumbnail: "/images/listings/miami.png",
+    propertyAddress: "789 Ocean Dr, Miami, FL",
+    currentHeight: 95,
+    maximumHeight: 200,
+    availableFloors: 35,
+    price: "220 NIL"
+  }
+];
+
 const MyNFTsPage = () => {
-  const { user } = useFlow();
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isConnected, setIsConnected] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
+    // Simulate loading NFTs
     const fetchNFTs = async () => {
-      if (!user.loggedIn) {
-        setLoading(false);
-        return;
-      }
-
       try {
         setLoading(true);
-        const userNFTs = await flowNftService.getNFTsForCurrentUser();
-        setNfts(userNFTs);
         
-        // Set all NFTs as verified (mock data)
+        // Check if wallet is connected (for demo, we'll assume it is after a delay)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setIsConnected(true);
+        
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Use mock data
+        setNfts(mockNFTs);
+        
+        // Set all NFTs as verified
         const verifiedMap: Record<string, boolean> = {};
-        userNFTs.forEach((nft: any) => {
+        mockNFTs.forEach((nft) => {
           verifiedMap[nft.id] = true;
         });
         setVerificationStatus(verifiedMap);
@@ -55,22 +94,22 @@ const MyNFTsPage = () => {
     };
 
     fetchNFTs();
-  }, [user.loggedIn]);
+  }, []);
 
-  if (!user.loggedIn) {
+  if (!isConnected) {
     return (
       <div className="container mx-auto px-4 pt-36 pb-16 min-h-screen">
         <div className="flex flex-col items-center justify-center h-96 text-center">
-          <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-blue-500 flex items-center justify-center">
+          <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-primary/20 flex items-center justify-center">
             <img 
-              src="/images/Flow_Logo.png" 
-              alt="Flow" 
+              src="/images/nil-logo.png" 
+              alt="=nil;" 
               className="w-16 h-16" 
             />
           </div>
-          <h1 className="text-3xl font-bold mb-4">Connect Your Flow Wallet</h1>
+          <h1 className="text-3xl font-bold mb-4">Connect Your =nil; Wallet</h1>
           <p className="text-gray-500 mb-8 max-w-md">
-            Please connect your Flow wallet to view your NFTs.
+            Please connect your =nil; wallet to view your NFTs.
           </p>
         </div>
       </div>
@@ -82,15 +121,15 @@ const MyNFTsPage = () => {
       <div className="flex items-center mb-8">
         <h1 className="text-4xl font-bold">My Air Rights NFTs</h1>
         <img 
-          src="/images/Flow_Logo.png" 
-          alt="Flow" 
+          src="/images/nil-logo.png" 
+          alt="=nil;" 
           className="w-12 h-12 ml-4" 
         />
       </div>
       
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
       ) : nfts.length === 0 ? (
         <div className="bg-dark_grey rounded-lg p-8 text-center">
@@ -101,7 +140,7 @@ const MyNFTsPage = () => {
           </p>
           <Link 
             href="/listings"
-            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors"
           >
             <Icon icon="heroicons:shopping-bag" className="mr-2" />
             Browse Listings
@@ -130,12 +169,12 @@ const MyNFTsPage = () => {
                   </div>
                 )}
                 
-                {/* Add ZK Verification Badge in top-right corner */}
+                {/* Add Verification Badge in top-right corner */}
                 <div className="absolute top-2 right-2">
                   <ZkVerificationBadge 
                     verified={verificationStatus[nft.id] || false}
                     proofId={`proof-${nft.id}`}
-                    system="groth16"
+                    system="nil"
                     className="bg-black bg-opacity-50 p-1 rounded-md"
                   />
                 </div>
@@ -164,19 +203,19 @@ const MyNFTsPage = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Price Paid:</span>
-                    <span className="font-medium">{nft.price} ETH</span>
+                    <span className="font-medium">{nft.price}</span>
                   </div>
                 </div>
                 
                 <div className="flex justify-between items-center">
                   <a 
-                    href={`https://testnet.flowscan.io/account/${user?.addr}/collection`}
+                    href={`https://explorer.testnet.nil.foundation/`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:text-blue-600 flex items-center"
+                    className="text-primary hover:text-primary/80 flex items-center"
                   >
                     <Icon icon="heroicons:arrow-top-right-on-square" className="mr-1" />
-                    View on FlowScan
+                    View on =nil; Explorer
                   </a>
                   
                   <button className="flex items-center text-gray-400 hover:text-white">
