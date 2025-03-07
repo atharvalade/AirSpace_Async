@@ -17,11 +17,32 @@ The =nil; CLI is required for wallet setup and management. Install it using:
 curl -fsSL https://github.com/NilFoundation/nil_cli/raw/master/install.sh | bash
 ```
 
+After installation, make sure the CLI is in your PATH:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+You may want to add this line to your shell profile file (e.g., ~/.bashrc, ~/.zshrc) to make it permanent.
+
 Verify the installation:
 
 ```bash
-nil --version
+nil help
 ```
+
+### Fixing PATH Issues
+
+If you're having trouble with the =nil; CLI not being found, we provide a helper script:
+
+```bash
+npm run fix-path
+```
+
+This script will:
+1. Add ~/.local/bin to your PATH for the current session
+2. Verify that the nil CLI is accessible
+3. Optionally add the PATH update to your shell profile file
 
 ## Setup
 
@@ -165,6 +186,7 @@ This project integrates with the =nil; network by:
 - **Contract verification**: Use the =nil; block explorer to verify your contract
 - **Error with deployer account**: Make sure your private key is correctly set in the .env file
 - **Wallet issues**: Ensure the =nil; CLI is properly installed and configured
+- **"Command not found" errors**: Run `npm run fix-path` to add the =nil; CLI to your PATH
 
 ## License
 

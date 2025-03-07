@@ -59,6 +59,32 @@ function getSmartAccountInfo() {
   }
 }
 
+// Function to get private key from nil CLI config
+function getPrivateKeyFromNilConfig() {
+  try {
+    // Get the config file location
+    const homeDir = process.env.HOME || process.env.USERPROFILE;
+    const configPath = `${homeDir}/.nil/config.json`;
+    
+    if (!fs.existsSync(configPath)) {
+      return null;
+    }
+    
+    // Read the config file
+    const configContent = fs.readFileSync(configPath, 'utf8');
+    const config = JSON.parse(configContent);
+    
+    // Extract the private key
+    if (config && config.private_key) {
+      console.log('Private key found in =nil; CLI config');
+      return config.private_key;
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
 async function main() {
   console.log('Setting up .env file for =nil; NFT deployment');
   
@@ -85,8 +111,11 @@ async function main() {
   
   // Try to get smart account address from nil CLI
   let smartAccountAddress = null;
+  let privateKeyFromNil = null;
+  
   if (nilCliInstalled) {
     smartAccountAddress = getSmartAccountInfo();
+    privateKeyFromNil = getPrivateKeyFromNilConfig();
   }
   
   // Prompt for each value
@@ -97,7 +126,7 @@ async function main() {
   
   const privateKey = await prompt(
     'Enter your private key (without 0x prefix)',
-    existingValues.PRIVATE_KEY || defaultValues.PRIVATE_KEY
+    privateKeyFromNil || existingValues.PRIVATE_KEY || defaultValues.PRIVATE_KEY
   );
   
   const nftContractAddress = await prompt(
@@ -127,6 +156,11 @@ NIL_WALLET_ADDRESS=${walletAddress}`;
     console.log('2. Run our wallet setup script: npm run wallet-setup');
   } else if (!smartAccountAddress) {
     console.log('\nNo smart account detected. To set up your wallet:');
+    console.log('Run our wallet setup script: npm run wallet-setup');
+  }
+  
+  if (!privateKey || privateKey === defaultValues.PRIVATE_KEY) {
+    console.log('\nWarning: No private key set. You need a valid private key to deploy contracts.');
     console.log('Run our wallet setup script: npm run wallet-setup');
   }
   

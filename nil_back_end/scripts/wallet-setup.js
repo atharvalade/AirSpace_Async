@@ -148,6 +148,38 @@ function updateEnvValue(key, value) {
   }
 }
 
+// Function to get private key from nil CLI config
+function getPrivateKey() {
+  try {
+    console.log('Retrieving private key from =nil; CLI config...');
+    
+    // Get the config file location
+    const homeDir = process.env.HOME || process.env.USERPROFILE;
+    const configPath = `${homeDir}/.nil/config.json`;
+    
+    if (!fs.existsSync(configPath)) {
+      console.error(`Config file not found at ${configPath}`);
+      return null;
+    }
+    
+    // Read the config file
+    const configContent = fs.readFileSync(configPath, 'utf8');
+    const config = JSON.parse(configContent);
+    
+    // Extract the private key
+    if (config && config.private_key) {
+      console.log('Private key found in =nil; CLI config');
+      return config.private_key;
+    } else {
+      console.error('Private key not found in =nil; CLI config');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error retrieving private key:', error.message);
+    return null;
+  }
+}
+
 async function main() {
   console.log('=nil; Wallet Setup');
   console.log('==================');
@@ -195,9 +227,21 @@ async function main() {
   // Get smart account info
   const smartAccountAddress = getSmartAccountInfo();
   
+  // Get private key from nil CLI config
+  const privateKey = getPrivateKey();
+  
   if (smartAccountAddress) {
     // Update .env file with smart account address
     updateEnvValue('NIL_WALLET_ADDRESS', smartAccountAddress);
+    
+    if (privateKey) {
+      // Update .env file with private key
+      updateEnvValue('PRIVATE_KEY', privateKey);
+      console.log('Private key saved to .env file');
+    } else {
+      console.log('Warning: Could not retrieve private key from =nil; CLI config.');
+      console.log('You will need to manually set the PRIVATE_KEY in your .env file.');
+    }
     
     console.log('\nWallet setup complete!');
     console.log('\nNext steps:');
