@@ -9,6 +9,8 @@
     "fix-path": "bash scripts/fix-path.sh",
     "extract-key": "node scripts/extract-key.js",
     "get-shards": "node scripts/get-shards.js",
+    "create-account": "node scripts/create-account.js",
+    "install-sdk": "bash scripts/install-sdk.sh",
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy": "hardhat run scripts/deploy.ts --network nil_testnet",
@@ -36,6 +38,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@nil-foundation/sdk": "^0.1.0",
     "@openzeppelin/contracts": "^4.9.3",
     "axios": "^1.6.7"
   }

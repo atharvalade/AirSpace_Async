@@ -69,6 +69,19 @@ function getBaseRpcUrl() {
   }
 }
 
+// Function to update the RPC URL with a specific shard
+function updateRpcUrlWithShard(baseUrl, shardId) {
+  // Check if the URL already has query parameters
+  const hasParams = baseUrl.includes('?');
+  
+  // Add the shard parameter
+  const updatedUrl = hasParams 
+    ? `${baseUrl}&shard=${shardId}` 
+    : `${baseUrl}?shard=${shardId}`;
+  
+  return updatedUrl;
+}
+
 async function main() {
   console.log('=nil; Shard Configuration');
   console.log('=========================');
@@ -102,6 +115,13 @@ async function main() {
   
   // Update NIL_SHARD_ID in .env file
   updateEnvValue('NIL_SHARD_ID', normalizedShardId);
+  
+  // Update the RPC URL with the shard ID
+  const updatedRpcUrl = updateRpcUrlWithShard(baseRpcUrl, normalizedShardId);
+  console.log(`Updated RPC URL with shard: ${updatedRpcUrl}`);
+  
+  // Update NIL_TESTNET_URL in .env file
+  updateEnvValue('NIL_TESTNET_URL', updatedRpcUrl);
   
   console.log('\nShard configuration complete!');
   console.log('\nNext steps:');

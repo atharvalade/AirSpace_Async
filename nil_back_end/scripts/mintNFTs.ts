@@ -107,6 +107,38 @@ function getShardId(): string | null {
   return null;
 }
 
+// Function to create a provider with shard ID
+function createProviderWithShard(rpcUrl: string, shardId: string): providers.JsonRpcProvider {
+  // Create a custom provider with shard ID in the request
+  const provider = new providers.JsonRpcProvider(rpcUrl);
+  
+  // Override the send method to include the shard ID in the request
+  const originalSend = provider.send.bind(provider);
+  provider.send = async (method: string, params: Array<any>): Promise<any> => {
+    // Add shard ID to the request context
+    const modifiedParams = [...params];
+    
+    // For specific methods, add shard context
+    if (method === 'eth_getBalance' || 
+        method === 'eth_call' || 
+        method === 'eth_estimateGas' || 
+        method === 'eth_sendTransaction' || 
+        method === 'eth_sendRawTransaction') {
+      // Add shard context to the last parameter if it's an object
+      if (modifiedParams.length > 0 && typeof modifiedParams[modifiedParams.length - 1] === 'object') {
+        modifiedParams[modifiedParams.length - 1].shard = shardId;
+      } else {
+        // Add a new parameter with shard context
+        modifiedParams.push({ shard: shardId });
+      }
+    }
+    
+    return originalSend(method, modifiedParams);
+  };
+  
+  return provider;
+}
+
 async function main() {
   // Check if PRIVATE_KEY is set in .env
   if (!process.env.PRIVATE_KEY) {
@@ -123,14 +155,14 @@ async function main() {
   
   if (!shardId) {
     console.log("No shard ID found in .env file.");
-    console.log("Please run 'npm run get-shards' to select a shard before minting.");
+    console.log("Please run 'npm run get-shards' to configure a shard before minting.");
     return;
   }
   
   console.log(`Using shard ID: ${shardId}`);
 
-  // Create provider and wallet
-  const provider = new providers.JsonRpcProvider(process.env.NIL_TESTNET_URL);
+  // Create provider with shard ID
+  const provider = createProviderWithShard(process.env.NIL_TESTNET_URL, shardId);
   const wallet = new Wallet(process.env.PRIVATE_KEY, provider);
   
   console.log("Minting NFTs with account:", wallet.address);

@@ -5,7 +5,7 @@ require("@typechain/hardhat");
 require("dotenv").config();
 
 // Load environment variables
-const NIL_TESTNET_URL = process.env.NIL_TESTNET_URL || "https://testnet.nil.foundation";
+const NIL_TESTNET_URL = process.env.NIL_TESTNET_URL || "https://api.devnet.nil.foundation/api/bot-1253/cda16f81590b0f26c11f4b25c4417b41?shard=1";
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 
 /** @type import('hardhat/config').HardhatUserConfig */

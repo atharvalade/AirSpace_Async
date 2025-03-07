@@ -31,6 +31,16 @@ Verify the installation:
 nil help
 ```
 
+### Installing =nil; SDK
+
+To use the smart account creation and token top-up functionality, you need to install the =nil; SDK:
+
+```bash
+npm run install-sdk
+```
+
+This script will install the @nil-foundation/sdk package, which is required for creating smart accounts and topping them up with tokens.
+
 ### Fixing PATH Issues
 
 If you're having trouble with the =nil; CLI not being found, we provide a helper script:
@@ -68,7 +78,11 @@ This interactive script will:
 
 ## Wallet Setup
 
-To create and manage your =nil; wallet, you can use our wallet setup script:
+There are multiple ways to set up your wallet:
+
+### Option 1: Using the =nil; CLI
+
+To create and manage your =nil; wallet using the CLI, you can use our wallet setup script:
 
 ```bash
 npm run wallet-setup
@@ -83,6 +97,23 @@ This script will guide you through the official =nil; CLI workflow:
 5. Retrieve your smart account information (`nil smart-account info`)
 6. Extract your private key from the =nil; CLI config
 7. Save your wallet address and private key to the `.env` file
+
+### Option 2: Using the =nil; SDK
+
+To create a smart account directly using the =nil; SDK and top it up with tokens:
+
+```bash
+npm run create-account
+```
+
+This script will:
+1. Create a new smart account using the =nil; SDK
+2. Save the account address and private key to your `.env` file
+3. Check your token balance before top-up
+4. Top up your account with custom 'mock' tokens (NIL, BTC, USDC, etc.)
+5. Check your token balance after top-up
+
+This is particularly useful for quickly creating a new account and funding it with test tokens for development purposes.
 
 ### Extracting Your Private Key
 
@@ -107,11 +138,12 @@ npm run get-shards
 
 This script will:
 1. Prompt you to enter a shard ID manually (e.g., 1, 2, 3, etc.)
-2. Save the shard ID to your `.env` file
+2. Update your RPC URL to include the shard ID
+3. Save the shard ID and updated RPC URL to your `.env` file
 
 You must run this script before deploying contracts or minting NFTs.
 
-> **Note**: The =nil; network API does not currently support automatic shard ID retrieval. You will need to manually specify a shard ID to use.
+> **Note**: The =nil; network API does not currently support automatic shard ID retrieval. You will need to manually specify a shard ID to use. If you encounter "shard API not found" errors, try different shard IDs until you find one that works.
 
 You can also manually set up your wallet using the =nil; CLI directly:
 
