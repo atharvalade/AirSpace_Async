@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "setup": "node scripts/setup.js",
+    "wallet-setup": "node scripts/wallet-setup.js",
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy": "hardhat run scripts/deploy.ts --network nil_testnet",
     "mint": "hardhat run scripts/mintNFTs.ts --network nil_testnet",
+    "transfer": "hardhat run scripts/transfer-nft.ts --network nil_testnet",
     "generate-types": "hardhat typechain"
   },
   "keywords": [],

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
+const { execSync } = require('child_process');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -10,14 +11,12 @@ const rl = readline.createInterface({
 // Path to .env file
 const envPath = path.join(__dirname, '../.env');
 
-// Check if .env file exists
-const envExists = fs.existsSync(envPath);
-
 // Default values
 const defaultValues = {
   NIL_TESTNET_URL: 'https://api.devnet.nil.foundation/api/bot-1253/cda16f81590b0f26c11f4b25c4417b41',
   PRIVATE_KEY: '',
-  NFT_CONTRACT_ADDRESS: ''
+  NFT_CONTRACT_ADDRESS: '',
+  NIL_WALLET_ADDRESS: ''
 };
 
 // Function to prompt for input
@@ -29,6 +28,37 @@ function prompt(question, defaultValue) {
   });
 }
 
+// Function to check if nil CLI is installed
+function checkNilCli() {
+  try {
+    // Try to run a simple nil command instead of using --version
+    const output = execSync('nil help', { encoding: 'utf8' });
+    console.log('=nil; CLI detected successfully!');
+    return true;
+  } catch (error) {
+    console.log('=nil; CLI not detected. For best experience, install it using:');
+    console.log('curl -fsSL https://github.com/NilFoundation/nil_cli/raw/master/install.sh | bash');
+    console.log('\nIf you have already installed it, make sure it is in your PATH:');
+    console.log('export PATH="$HOME/.local/bin:$PATH"');
+    return false;
+  }
+}
+
+// Function to get smart account info if available
+function getSmartAccountInfo() {
+  try {
+    const output = execSync('nil smart-account info', { encoding: 'utf8' });
+    const addressMatch = output.match(/Smart account address: ([0-9a-fA-Fx]+)/);
+    if (addressMatch && addressMatch[1]) {
+      console.log(`Found smart account address: ${addressMatch[1]}`);
+      return addressMatch[1];
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
 async function main() {
   console.log('Setting up .env file for =nil; NFT deployment');
   
@@ -36,7 +66,7 @@ async function main() {
   let existingValues = {};
   
   // If .env file exists, read its content
-  if (envExists) {
+  if (fs.existsSync(envPath)) {
     envContent = fs.readFileSync(envPath, 'utf8');
     
     // Parse existing values
@@ -48,6 +78,15 @@ async function main() {
         }
       }
     });
+  }
+  
+  // Check if nil CLI is installed
+  const nilCliInstalled = checkNilCli();
+  
+  // Try to get smart account address from nil CLI
+  let smartAccountAddress = null;
+  if (nilCliInstalled) {
+    smartAccountAddress = getSmartAccountInfo();
   }
   
   // Prompt for each value
@@ -66,19 +105,35 @@ async function main() {
     existingValues.NFT_CONTRACT_ADDRESS || defaultValues.NFT_CONTRACT_ADDRESS
   );
   
+  const walletAddress = await prompt(
+    'Enter your =nil; wallet address',
+    smartAccountAddress || existingValues.NIL_WALLET_ADDRESS || defaultValues.NIL_WALLET_ADDRESS
+  );
+  
   // Create new .env content
   const newEnvContent = `NIL_TESTNET_URL=${nilTestnetUrl}
 PRIVATE_KEY=${privateKey}
-NFT_CONTRACT_ADDRESS=${nftContractAddress}`;
+NFT_CONTRACT_ADDRESS=${nftContractAddress}
+NIL_WALLET_ADDRESS=${walletAddress}`;
   
   // Write to .env file
   fs.writeFileSync(envPath, newEnvContent);
   
   console.log('.env file has been updated successfully!');
-  console.log('You can now run:');
-  console.log('  npm run compile - to compile the contracts');
-  console.log('  npm run deploy - to deploy the NFT contract');
-  console.log('  npm run mint - to mint the NFTs');
+  
+  if (!nilCliInstalled) {
+    console.log('\nFor wallet setup, we recommend installing the =nil; CLI:');
+    console.log('1. Install the CLI: curl -fsSL https://github.com/NilFoundation/nil_cli/raw/master/install.sh | bash');
+    console.log('2. Run our wallet setup script: npm run wallet-setup');
+  } else if (!smartAccountAddress) {
+    console.log('\nNo smart account detected. To set up your wallet:');
+    console.log('Run our wallet setup script: npm run wallet-setup');
+  }
+  
+  console.log('\nNext steps:');
+  console.log('1. npm run compile - to compile the contracts');
+  console.log('2. npm run deploy - to deploy the NFT contract');
+  console.log('3. npm run mint - to mint the NFTs');
   
   rl.close();
 }

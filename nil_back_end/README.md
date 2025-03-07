@@ -6,7 +6,22 @@ This project implements NFT minting for AirSpace on the =nil; network. It allows
 
 - Node.js (v14+)
 - npm or yarn
+- =nil; CLI installed (for wallet setup)
 - A wallet with =nil; testnet tokens
+
+## Installing =nil; CLI
+
+The =nil; CLI is required for wallet setup and management. Install it using:
+
+```bash
+curl -fsSL https://github.com/NilFoundation/nil_cli/raw/master/install.sh | bash
+```
+
+Verify the installation:
+
+```bash
+nil --version
+```
 
 ## Setup
 
@@ -28,6 +43,42 @@ This interactive script will:
 - Prompt for your =nil; testnet URL
 - Prompt for your wallet's private key
 - Prompt for the NFT contract address (if already deployed)
+
+## Wallet Setup
+
+To create and manage your =nil; wallet, you can use our wallet setup script:
+
+```bash
+npm run wallet-setup
+```
+
+This script will guide you through the official =nil; CLI workflow:
+
+1. Initialize the =nil; CLI config (`nil config init`)
+2. Set the RPC endpoint (`nil config set rpc_endpoint RPC_ENDPOINT`)
+3. Generate a new private key (`nil keygen new`)
+4. Create a new smart account (`nil smart-account new`)
+5. Retrieve your smart account information (`nil smart-account info`)
+6. Save your wallet address to the `.env` file
+
+You can also manually set up your wallet using the =nil; CLI directly:
+
+```bash
+# Initialize config
+nil config init
+
+# Set RPC endpoint
+nil config set rpc_endpoint YOUR_RPC_ENDPOINT
+
+# Generate new private key
+nil keygen new
+
+# Create new smart account
+nil smart-account new
+
+# View your smart account info
+nil smart-account info
+```
 
 ## Usage
 
@@ -56,6 +107,21 @@ npm run mint
 ```
 
 This will mint 5 NFTs with the predefined metadata.
+
+### Transfer NFTs
+
+To transfer an NFT to another wallet:
+
+```bash
+npm run transfer
+```
+
+This interactive script will:
+1. Connect to your wallet and the NFT contract
+2. Prompt for the token ID you want to transfer
+3. Verify that you own the token
+4. Prompt for the recipient's wallet address
+5. Execute the transfer transaction
 
 ## Contract Details
 
@@ -90,6 +156,7 @@ This project integrates with the =nil; network by:
 2. Using the faucet service to obtain testnet tokens
 3. Deploying ERC-721 contracts to the network
 4. Minting NFTs on the network
+5. Facilitating NFT transfers between wallets
 
 ## Troubleshooting
 
@@ -97,6 +164,7 @@ This project integrates with the =nil; network by:
 - **Transaction failures**: Check the gas settings and network status
 - **Contract verification**: Use the =nil; block explorer to verify your contract
 - **Error with deployer account**: Make sure your private key is correctly set in the .env file
+- **Wallet issues**: Ensure the =nil; CLI is properly installed and configured
 
 ## License
 
