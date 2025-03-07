@@ -115,6 +115,25 @@ This script will:
 
 This is particularly useful for quickly creating a new account and funding it with test tokens for development purposes.
 
+### Option 3: Automated Wallet Initialization
+
+For a streamlined experience, especially when integrating with the frontend, use our automated wallet initialization script:
+
+```bash
+npm run initialize-wallet
+```
+
+This script will:
+1. Check if the =nil; CLI is installed
+2. Initialize the =nil; CLI config with your testnet URL
+3. Generate a new private key
+4. Create a new smart account
+5. Extract the wallet address and private key
+6. Save both to your `.env` file
+7. Return the wallet information as JSON
+
+This script is designed to be called programmatically from the frontend, providing a seamless onboarding experience for users.
+
 ### Extracting Your Private Key
 
 If you already have a =nil; CLI wallet set up but need to extract your private key:
@@ -215,7 +234,7 @@ This interactive script will:
 
 ## Automated Token and NFT Transfer
 
-This project includes a smart contract that automatically transfers 1 NIL token and an NFT to a hardcoded wallet address (0x000129e60021a183845df99aab9fb0931df64b5c).
+This project includes a smart contract that automatically transfers 1 NIL token and an NFT to a hardcoded wallet address (0x000129e60021a183845df99AAB9fb0931Df64B5c).
 
 ### Deploy Transfer Contract
 

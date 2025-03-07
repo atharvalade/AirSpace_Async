@@ -175,7 +175,8 @@ export const AgreementDialog = ({ isOpen, onClose, agreement, loading, nft }: Ag
             <DeploymentProgress 
               steps={steps} 
               currentStep={currentStep}
-              status={deploymentStatus}
+              deploymentStatus={deploymentStatus === 'waiting' ? null : deploymentStatus}
+              nftTokenId={nft?.token_id}
             />
           ) : (
             <div className="prose prose-invert max-w-none">

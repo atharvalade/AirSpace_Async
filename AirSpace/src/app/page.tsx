@@ -6,12 +6,11 @@ import Portfolio from "@/components/Home/portfolio";
 import Upgrade from "@/components/Home/upgrade";
 import Perks from "@/components/Home/perks";
 import AirRightPrices from "@/components/Home/AirRightPrices";
-import ZkSyncBanner from "@/components/Home/ZkSyncBanner";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AirSpace - Powered by zkSync",
-  description: "Buy and sell air rights as NFTs with zkSync's seamless authentication",
+  title: "AirSpace - NFT Marketplace for Air Rights",
+  description: "Buy and sell air rights as NFTs with seamless authentication",
 };
 
 export default function Home() {
@@ -19,7 +18,6 @@ export default function Home() {
     <main>
       <Hero />
       <AirRightPrices />
-      <ZkSyncBanner />
       <Portfolio />
       {/* <Work />
       <Upgrade />

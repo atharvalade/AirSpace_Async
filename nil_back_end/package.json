@@ -11,6 +11,7 @@
     "get-shards": "node scripts/get-shards.js",
     "create-account": "node scripts/create-account.js",
     "install-sdk": "bash scripts/install-sdk.sh",
+    "initialize-wallet": "node scripts/initialize-wallet.js",
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy": "hardhat run scripts/deploy.ts --network nil_testnet",
